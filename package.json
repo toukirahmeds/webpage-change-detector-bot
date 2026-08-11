@@ -1,5 +1,5 @@
 {
-  "name": "page-change-detector-bot",
+  "name": "webpage-change-detector-bot",
   "version": "1.0.0",
   "description": "A bot to inform about page changes.",
   "license": "ISC",

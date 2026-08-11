@@ -6,7 +6,6 @@ const {
     m = "The target page has been updated!"
 } = minimist(process.argv);
 
-console.log(minimist(process.argv));
 let pageUrl;
 
 try {
@@ -45,4 +44,13 @@ try {
     process.exit(9);
 }
 
-console.log(message)
+const fetchHtmlAsync = async pageUrl => {
+    try {
+        const response = await fetch(pageUrl);
+        console.log(await response.text());
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+fetchHtmlAsync(pageUrl);
