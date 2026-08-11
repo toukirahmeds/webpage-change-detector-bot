@@ -1,4 +1,5 @@
 import minimist from "minimist";
+import schedule from "node-schedule";
 
 const {
     p,
@@ -47,10 +48,30 @@ try {
 const fetchHtmlAsync = async pageUrl => {
     try {
         const response = await fetch(pageUrl);
-        console.log(await response.text());
+        return response.text();
     } catch (err) {
         console.error(err);
     }
 };
 
-fetchHtmlAsync(pageUrl);
+let oldHtml;
+let currentHtml
+
+schedule.scheduleJob(`*/${timeSeconds} * * * * *`, async () => {
+    try {
+        const currentHtml = (await fetchHtmlAsync(pageUrl)).trim();
+
+        if (!oldHtml) {
+            oldHtml = currentHtml;
+        }
+
+        if (oldHtml !== currentHtml) {
+            console.log("The html has changed since the previous iteration.");
+            oldHtml = currentHtml;
+        } else {
+            console.log("No change in html.")
+        }
+    } catch (err) {
+        console.error(err);
+    }
+});
