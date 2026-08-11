@@ -1,0 +1,14 @@
+{
+  "name": "page-change-detector-bot",
+  "version": "1.0.0",
+  "description": "A bot to inform about page changes.",
+  "license": "ISC",
+  "author": "toukirahmeds@gmail.com",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  }
+}
