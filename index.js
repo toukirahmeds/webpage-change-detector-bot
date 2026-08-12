@@ -1,5 +1,7 @@
+import "dotenv/config";
 import minimist from "minimist";
 import schedule from "node-schedule";
+import telegramBotAPI from "node-telegram-bot-api";
 
 const {
     p,
@@ -45,6 +47,13 @@ try {
     process.exit(9);
 }
 
+const {
+    TELEGRAM_HTTP_API,
+    BOT_CHAT_ID
+} = process.env;
+
+const telegramBot = new telegramBotAPI(TELEGRAM_HTTP_API);
+
 const fetchHtmlAsync = async pageUrl => {
     try {
         const response = await fetch(pageUrl);
@@ -65,12 +74,19 @@ schedule.scheduleJob(`*/${timeSeconds} * * * * *`, async () => {
             oldHtml = currentHtml;
         }
 
-        if (oldHtml !== currentHtml) {
-            console.log("The html has changed since the previous iteration.");
-            oldHtml = currentHtml;
-        } else {
-            console.log("No change in html.")
+        if (oldHtml === currentHtml) {
+            return console.log("No change in html.");
         }
+
+        const msg = message;
+        console.log(msg);
+        
+        await telegramBot.sendMessage(
+            BOT_CHAT_ID,
+            msg
+        );
+        
+        oldHtml = currentHtml;
     } catch (err) {
         console.error(err);
     }
