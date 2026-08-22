@@ -1,5 +1,5 @@
 ### Description
-A simple bot to inform webpage changes to a telegram chat.
+A simple bot to inform webpage changes to a telegram bot chat.
 
 ## How to run the application
 - Make sure node.js and npm are installed. If not follow the steps at https://nodejs.org/en/download.
