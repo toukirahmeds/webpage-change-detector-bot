@@ -7,7 +7,7 @@ const ADDRESS = `http://localhost:${SERVER_PORT}`;
 
 const app = express();
 
-app.use(express.static("public"))
+app.use(express.static("public"));
 
 app.listen(SERVER_PORT, () => {
     console.log(`Server running on ${ADDRESS}`);
