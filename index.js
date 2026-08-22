@@ -39,7 +39,7 @@ try {
     message = m;
 
     if (!message || message?.length === 0 || typeof message !== "string") {
-        throw new Error("Must not be a empty string.")
+        throw new Error("Must be a valid non-empty string.")
     }
 } catch (err) {
     console.error(err);
@@ -48,11 +48,11 @@ try {
 }
 
 const {
-    TELEGRAM_HTTP_API,
+    TELEGRAM_HTTP_API_TOKEN,
     BOT_CHAT_ID
 } = process.env;
 
-const telegramBot = new telegramBotAPI(TELEGRAM_HTTP_API);
+const telegramBot = new telegramBotAPI(TELEGRAM_HTTP_API_TOKEN);
 
 const fetchHtmlAsync = async pageUrl => {
     try {
