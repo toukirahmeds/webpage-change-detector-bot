@@ -69,10 +69,10 @@ try {
  */
 const fetchHtmlAsync = async pageUrl => {
     try {
-        const { text } = await fetch(pageUrl);
-        return text();
+        const response = await fetch(pageUrl);
+        return response.text();
     } catch (err) {
-        console.error(err);
+        throw err;
     }
 };
 
@@ -85,7 +85,9 @@ const telegramBot = new telegramBotAPI(TELEGRAM_HTTP_API_TOKEN);
  */
 schedule.scheduleJob(`*/${timeSeconds} * * * * *`, async () => {
     try {
-        const currentHtml = (await fetchHtmlAsync(pageUrl)).trim();
+        const fetchedHtml = await fetchHtmlAsync(pageUrl);
+
+        currentHtml = fetchedHtml.trim();
 
         if (!oldHtml) {
             oldHtml = currentHtml;
