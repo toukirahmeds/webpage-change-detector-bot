@@ -4,11 +4,19 @@ import schedule from "node-schedule";
 import telegramBotAPI from "node-telegram-bot-api";
 
 const {
+    TELEGRAM_HTTP_API_TOKEN,
+    BOT_CHAT_ID
+} = process.env;
+
+const {
     p,
     s = 5,
     m = "The target page has been updated!"
 } = minimist(process.argv);
 
+/**
+ * Set value of 'p' to 'pageUrl' and validate.
+ */
 let pageUrl;
 
 try {
@@ -19,6 +27,9 @@ try {
     process.exit(9);
 }
 
+/**
+ * Set value of 's' to 'timeSeconds' and validate.
+ */
 let timeSeconds;
 
 try {
@@ -33,6 +44,9 @@ try {
     process.exit(9);
 }
 
+/**
+ * Set value of 'm' to 'message' and validate.
+ */
 let message;
 
 try {
@@ -47,25 +61,28 @@ try {
     process.exit(9);
 }
 
-const {
-    TELEGRAM_HTTP_API_TOKEN,
-    BOT_CHAT_ID
-} = process.env;
-
-const telegramBot = new telegramBotAPI(TELEGRAM_HTTP_API_TOKEN);
-
+/**
+ * Request to the url and fetch html file string.
+ * 
+ * @param {string} pageUrl 
+ * @returns {string}
+ */
 const fetchHtmlAsync = async pageUrl => {
     try {
-        const response = await fetch(pageUrl);
-        return response.text();
+        const { text } = await fetch(pageUrl);
+        return text();
     } catch (err) {
         console.error(err);
     }
 };
 
 let oldHtml;
-let currentHtml
+let currentHtml;
+const telegramBot = new telegramBotAPI(TELEGRAM_HTTP_API_TOKEN);
 
+/**
+ * Runs on every [timeSeconds] seconds.
+ */
 schedule.scheduleJob(`*/${timeSeconds} * * * * *`, async () => {
     try {
         const currentHtml = (await fetchHtmlAsync(pageUrl)).trim();
@@ -74,11 +91,19 @@ schedule.scheduleJob(`*/${timeSeconds} * * * * *`, async () => {
             oldHtml = currentHtml;
         }
 
+        // if `oldHtml` and `currentHtml` are same, then
+        // print a log and do not execute further.
         if (oldHtml === currentHtml) {
             return console.log("No change in html.");
         }
 
+        /**
+         * `oldHtml` and `currentHtml` are not same, so
+         * set `msg` to value of `message` and send it
+         * to the telegram bot. 
+         */
         const msg = message;
+
         console.log(msg);
         
         await telegramBot.sendMessage(
@@ -86,6 +111,7 @@ schedule.scheduleJob(`*/${timeSeconds} * * * * *`, async () => {
             msg
         );
         
+        // Finally set `oldHtml` to value of `currentHtml`
         oldHtml = currentHtml;
     } catch (err) {
         console.error(err);

@@ -1,7 +1,7 @@
 {
   "name": "webpage-change-detector-bot",
   "version": "1.0.0",
-  "description": "A bot to inform about page changes.",
+  "description": "A bot to inform about webpage changes.",
   "license": "ISC",
   "author": "toukirahmeds@gmail.com",
   "type": "module",

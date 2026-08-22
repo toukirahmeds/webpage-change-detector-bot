@@ -3,6 +3,7 @@ import express from "express";
 import { load } from "cheerio";
 import fs from "fs/promises";
 
+// Url of the file.
 const FILE_URL = "./public/index.html";
 
 // Server Port
